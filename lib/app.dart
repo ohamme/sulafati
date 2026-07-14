@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/home/home_screen.dart';
+import 'package:sulafati/features/salafiya/screens/home/home_screen.dart';
 
 class SulafatiApp extends StatelessWidget {
   const SulafatiApp({super.key});
@@ -10,8 +10,8 @@ class SulafatiApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'سلفتي',
       theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
-        colorSchemeSeed: Colors.green,
       ),
       home: const HomeScreen(),
     );

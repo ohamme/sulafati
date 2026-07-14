@@ -1,5 +1,5 @@
-import 'package:sulafati/screens/salafiya/salafiya_list_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:sulafati/features/salafiya/screens/salafiya_list_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -52,15 +52,10 @@ class HomeScreen extends StatelessWidget {
                   );
                 },
               ),
-
               buildCard(context, Icons.people, "المشتركون", Colors.blue),
-
               buildCard(context, Icons.payments, "الدفعات", Colors.orange),
-
               buildCard(context, Icons.casino, "القرعة", Colors.purple),
-
               buildCard(context, Icons.bar_chart, "التقارير", Colors.red),
-
               buildCard(context, Icons.settings, "الإعدادات", Colors.grey),
             ],
           ),

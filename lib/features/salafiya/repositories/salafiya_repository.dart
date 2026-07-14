@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../core/database/database_helper.dart';
-import '../models/salafiya.dart';
+import 'package:sulafati/core/database/database_helper.dart';
+import 'package:sulafati/features/salafiya/models/salafiya.dart';
 
 class SalafiyaRepository {
   final DatabaseHelper _databaseHelper = DatabaseHelper.instance;
@@ -24,12 +24,6 @@ class SalafiyaRepository {
     return result.map((e) => Salafiya.fromMap(e)).toList();
   }
 
-  Future<int> delete(int id) async {
-    final db = await _databaseHelper.database;
-
-    return await db.delete('salafiyat', where: 'id = ?', whereArgs: [id]);
-  }
-
   Future<int> update(Salafiya salafiya) async {
     final db = await _databaseHelper.database;
 
@@ -39,5 +33,11 @@ class SalafiyaRepository {
       where: 'id = ?',
       whereArgs: [salafiya.id],
     );
+  }
+
+  Future<int> delete(int id) async {
+    final db = await _databaseHelper.database;
+
+    return await db.delete('salafiyat', where: 'id = ?', whereArgs: [id]);
   }
 }
