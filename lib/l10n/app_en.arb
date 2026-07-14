@@ -1,0 +1,19 @@
+{
+  "@@locale": "en",
+
+  "appName": "Sulafati",
+
+  "circles": "Circles",
+
+  "members": "Members",
+
+  "payments": "Payments",
+
+  "lottery": "Lottery",
+
+  "reports": "Reports",
+
+  "settings": "Settings",
+
+  "addCircle": "Add Circle"
+}
