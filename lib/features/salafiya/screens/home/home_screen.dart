@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sulafati/features/salafiya/screens/salafiya_list_screen.dart';
+import '../salafiya_list_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
