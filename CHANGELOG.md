@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.3.0] - 2026-07-15
+
+### Added
+- Project structure using Feature-first architecture.
+- SQLite database.
+- Salafiya model.
+- Salafiya repository.
+- Provider state management.
+- Salafiya list screen.
+- Salafiya add form.
+- Form validation.
+- Save data into SQLite.
+- Delete Salafiya.
+- Arabic-ready UI.
 جميع التغييرات المهمة في مشروع **سلفتي (Sulafati)** سيتم توثيقها هنا.
 
 ---

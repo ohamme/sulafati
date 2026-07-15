@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../models/salafiya.dart';
@@ -29,9 +30,11 @@ class _SalafiyaFormScreenState extends State<SalafiyaFormScreen> {
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
 
+    final amountText = _amountController.text.replaceAll(',', '');
+
     final salafiya = Salafiya(
       name: _nameController.text.trim(),
-      amount: double.parse(_amountController.text),
+      amount: double.parse(amountText),
       members: int.parse(_membersController.text),
       createdAt: DateTime.now().toIso8601String(),
       updatedAt: DateTime.now().toIso8601String(),
@@ -60,8 +63,10 @@ class _SalafiyaFormScreenState extends State<SalafiyaFormScreen> {
             children: [
               TextFormField(
                 controller: _nameController,
+                textInputAction: TextInputAction.next,
                 decoration: const InputDecoration(
                   labelText: "اسم السلفة",
+                  hintText: "مثال: سلفة الموظفين",
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
@@ -72,37 +77,47 @@ class _SalafiyaFormScreenState extends State<SalafiyaFormScreen> {
                 },
               ),
               const SizedBox(height: 16),
+
               TextFormField(
                 controller: _amountController,
                 keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
+                  decimal: false,
+                  signed: false,
                 ),
+                textInputAction: TextInputAction.next,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 decoration: const InputDecoration(
                   labelText: "قيمة القسط",
+                  hintText: "بالدينار العراقي",
+                  suffixText: "د.ع",
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
+                  if (value == null || value.isEmpty) {
                     return "يرجى إدخال قيمة القسط";
                   }
 
-                  if (double.tryParse(value) == null) {
+                  if (int.tryParse(value.replaceAll(',', '')) == null) {
                     return "أدخل رقماً صحيحاً";
                   }
 
                   return null;
                 },
               ),
+
               const SizedBox(height: 16),
+
               TextFormField(
                 controller: _membersController,
                 keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.done,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 decoration: const InputDecoration(
                   labelText: "عدد المشتركين",
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
+                  if (value == null || value.isEmpty) {
                     return "يرجى إدخال عدد المشتركين";
                   }
 
@@ -113,11 +128,16 @@ class _SalafiyaFormScreenState extends State<SalafiyaFormScreen> {
                   return null;
                 },
               ),
+
               const SizedBox(height: 24),
-              FilledButton.icon(
-                onPressed: _save,
-                icon: const Icon(Icons.save),
-                label: const Text("حفظ"),
+
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  onPressed: _save,
+                  icon: const Icon(Icons.save),
+                  label: const Text("حفظ"),
+                ),
               ),
             ],
           ),
