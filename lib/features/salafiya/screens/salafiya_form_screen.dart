@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../models/salafiya.dart';
+import '../providers/salafiya_provider.dart';
 
 class SalafiyaFormScreen extends StatefulWidget {
   const SalafiyaFormScreen({super.key});
@@ -22,16 +26,26 @@ class _SalafiyaFormScreenState extends State<SalafiyaFormScreen> {
     super.dispose();
   }
 
-  void _save() {
-    if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("سيتم ربط الحفظ بقاعدة البيانات في الإصدار القادم"),
-        ),
-      );
+  Future<void> _save() async {
+    if (!_formKey.currentState!.validate()) return;
 
-      Navigator.pop(context);
-    }
+    final salafiya = Salafiya(
+      name: _nameController.text.trim(),
+      amount: double.parse(_amountController.text),
+      members: int.parse(_membersController.text),
+      createdAt: DateTime.now().toIso8601String(),
+      updatedAt: DateTime.now().toIso8601String(),
+    );
+
+    await context.read<SalafiyaProvider>().addSalafiya(salafiya);
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text("تم حفظ السلفة بنجاح")));
+
+    Navigator.pop(context, true);
   }
 
   @override
@@ -60,7 +74,9 @@ class _SalafiyaFormScreenState extends State<SalafiyaFormScreen> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _amountController,
-                keyboardType: TextInputType.number,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
                 decoration: const InputDecoration(
                   labelText: "قيمة القسط",
                   border: OutlineInputBorder(),
@@ -69,6 +85,11 @@ class _SalafiyaFormScreenState extends State<SalafiyaFormScreen> {
                   if (value == null || value.trim().isEmpty) {
                     return "يرجى إدخال قيمة القسط";
                   }
+
+                  if (double.tryParse(value) == null) {
+                    return "أدخل رقماً صحيحاً";
+                  }
+
                   return null;
                 },
               ),
@@ -84,6 +105,11 @@ class _SalafiyaFormScreenState extends State<SalafiyaFormScreen> {
                   if (value == null || value.trim().isEmpty) {
                     return "يرجى إدخال عدد المشتركين";
                   }
+
+                  if (int.tryParse(value) == null) {
+                    return "أدخل عدداً صحيحاً";
+                  }
+
                   return null;
                 },
               ),
