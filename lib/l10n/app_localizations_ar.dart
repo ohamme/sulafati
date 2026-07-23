@@ -12,7 +12,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get appName => 'سلفتي';
 
   @override
-  String get circles => 'السلفيات';
+  String get circles => 'السلف';
 
   @override
   String get members => 'المشتركون';

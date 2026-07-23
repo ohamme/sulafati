@@ -69,7 +69,7 @@ class _SalafiyaListScreenState extends State<SalafiyaListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("السلفيات"),
+        title: const Text("السلف"),
         centerTitle: true,
       ),
       body: Consumer<SalafiyaProvider>(
@@ -161,7 +161,7 @@ class _SalafiyaListScreenState extends State<SalafiyaListScreen> {
                             const SizedBox(width: 8),
                             Text(
                               CurrencyFormatter.format(
-                                salafiya.amount,
+                                salafiya.totalAmount,
                               ),
                               style: const TextStyle(
                                 fontSize: 16,

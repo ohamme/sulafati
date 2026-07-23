@@ -1,30 +1,33 @@
 # Sulafati Roadmap
 
-## v0.2
-- [ ] SQLite
-- [ ] إدارة السلفيات
-- [ ] CRUD
+## v0.2.0
+- Project Foundation
+- Folder Organization
+- Splash Screen
+- Home Screen
+- Create Salafiya
 
-## v0.3
-- [ ] إدارة المشتركين
+---
 
-## v0.4
-- [ ] إدارة الدفعات
+## v0.3.0
+- Members
 
-## v0.5
-- [ ] نظام القرعة
+---
 
-## v0.6
-- [ ] رسائل واتساب
+## v0.4.0
+- Payments
 
-## v0.7
-- [ ] التقارير
+---
 
-## v0.8
-- [ ] النسخ الاحتياطي
+## v0.5.0
+- Lottery
 
-## v0.9
-- [ ] الإشعارات
+---
+
+## v0.6.0
+- Reports
+
+---
 
 ## v1.0
-- [ ] نشر التطبيق
+Stable Release

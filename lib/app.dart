@@ -1,19 +1,138 @@
 import 'package:flutter/material.dart';
-import 'package:sulafati/features/salafiya/screens/home/home_screen.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'core/theme/app_theme.dart';
+import 'features/splash/screens/splash_screen.dart';
+
+
 
 class SulafatiApp extends StatelessWidget {
-  const SulafatiApp({super.key});
+
+
+  const SulafatiApp({
+    super.key,
+  });
+
+
 
   @override
   Widget build(BuildContext context) {
+
+
     return MaterialApp(
+
+
+
+      title: "سلفتي",
+
+
+
       debugShowCheckedModeBanner: false,
-      title: 'سلفتي',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        useMaterial3: true,
-      ),
-      home: const HomeScreen(),
+
+
+
+      theme:
+          AppTheme.light,
+
+
+
+      darkTheme:
+          AppTheme.dark,
+
+
+
+      themeMode:
+          ThemeMode.system,
+
+
+
+
+
+      // اللغة الافتراضية
+
+      locale:
+          const Locale('ar'),
+
+
+
+
+
+      // اللغات المدعومة
+
+      supportedLocales: const [
+
+
+        Locale('ar'),
+
+
+        Locale('en'),
+
+
+      ],
+
+
+
+
+
+
+      // دعم Material بالعربي
+
+      localizationsDelegates: const [
+
+
+        GlobalMaterialLocalizations.delegate,
+
+
+        GlobalWidgetsLocalizations.delegate,
+
+
+        GlobalCupertinoLocalizations.delegate,
+
+
+      ],
+
+
+
+
+
+
+      // اتجاه التطبيق
+
+      builder:
+          (context, child){
+
+
+
+        return Directionality(
+
+
+          textDirection:
+              TextDirection.rtl,
+
+
+          child:
+              child!,
+
+
+        );
+
+
+      },
+
+
+
+
+
+
+      home:
+          const SplashScreen(),
+
+
+
     );
+
+
   }
+
+
 }

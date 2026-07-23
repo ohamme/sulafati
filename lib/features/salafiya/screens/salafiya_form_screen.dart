@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
+import '../controllers/salafiya_info_controller.dart';
 
-import '../models/salafiya.dart';
-import '../providers/salafiya_provider.dart';
+import '../widgets/form/form_header.dart';
+import '../widgets/form/fields/name_field.dart';
+import '../widgets/form/fields/admin_name_field.dart';
+import '../widgets/form/fields/phone_field.dart';
+import '../widgets/form/fields/monthly_payment_field.dart';
+import '../widgets/form/fields/members_field.dart';
+import '../widgets/form/fields/start_date_field.dart';
+import '../widgets/form/fields/notes_field.dart';
+
+import '../widgets/form/cards/summary_card.dart';
+import '../widgets/form/buttons/save_button.dart';
 
 class SalafiyaFormScreen extends StatefulWidget {
   const SalafiyaFormScreen({super.key});
@@ -13,133 +21,116 @@ class SalafiyaFormScreen extends StatefulWidget {
 }
 
 class _SalafiyaFormScreenState extends State<SalafiyaFormScreen> {
-  final _formKey = GlobalKey<FormState>();
+  late SalafiyaInfoController controller;
 
-  final _nameController = TextEditingController();
-  final _amountController = TextEditingController();
-  final _membersController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+
+    controller = SalafiyaInfoController();
+  }
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _amountController.dispose();
-    _membersController.dispose();
+    controller.dispose();
+
     super.dispose();
-  }
-
-  Future<void> _save() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    final amountText = _amountController.text.replaceAll(',', '');
-
-    final salafiya = Salafiya(
-      name: _nameController.text.trim(),
-      amount: double.parse(amountText),
-      members: int.parse(_membersController.text),
-      createdAt: DateTime.now().toIso8601String(),
-      updatedAt: DateTime.now().toIso8601String(),
-    );
-
-    await context.read<SalafiyaProvider>().addSalafiya(salafiya);
-
-    if (!mounted) return;
-
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text("تم حفظ السلفة بنجاح")));
-
-    Navigator.pop(context, true);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("إضافة سلفة"), centerTitle: true),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              TextFormField(
-                controller: _nameController,
-                textInputAction: TextInputAction.next,
-                decoration: const InputDecoration(
-                  labelText: "اسم السلفة",
-                  hintText: "مثال: سلفة الموظفين",
-                  border: OutlineInputBorder(),
+      appBar: AppBar(title: const Text("إنشاء سلفة جديدة"), centerTitle: true),
+
+      body: Directionality(
+        textDirection: TextDirection.rtl,
+
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+
+          child: Form(
+            key: controller.formKey,
+
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+
+              children: [
+                const FormHeader(),
+
+                const SizedBox(height: 20),
+
+                NameField(controller: controller.nameController),
+
+                const SizedBox(height: 15),
+
+                AdminNameField(controller: controller.adminNameController),
+
+                const SizedBox(height: 15),
+
+                PhoneField(controller: controller.phoneController),
+
+                const SizedBox(height: 15),
+
+                MonthlyPaymentField(
+                  controller: controller.monthlyPaymentController,
+                  onChanged: (_) {
+                    setState(() {});
+                  },
                 ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return "يرجى إدخال اسم السلفة";
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
 
-              TextFormField(
-                controller: _amountController,
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: false,
-                  signed: false,
+                const SizedBox(height: 15),
+
+                MembersField(
+                  controller: controller.membersController,
+
+                  onChanged: (_) {
+                    setState(() {});
+                  },
                 ),
-                textInputAction: TextInputAction.next,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: const InputDecoration(
-                  labelText: "قيمة القسط",
-                  hintText: "بالدينار العراقي",
-                  suffixText: "د.ع",
-                  border: OutlineInputBorder(),
+
+                const SizedBox(height: 15),
+
+                StartDateField(
+                  selectedDate: controller.startDate,
+
+                  onChanged: (date) {
+                    setState(() {
+                      controller.startDate = date;
+                    });
+                  },
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "يرجى إدخال قيمة القسط";
-                  }
 
-                  if (int.tryParse(value.replaceAll(',', '')) == null) {
-                    return "أدخل رقماً صحيحاً";
-                  }
+                const SizedBox(height: 15),
 
-                  return null;
-                },
-              ),
+                NotesField(controller: controller.notesController),
 
-              const SizedBox(height: 16),
+                const SizedBox(height: 20),
 
-              TextFormField(
-                controller: _membersController,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.done,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: const InputDecoration(
-                  labelText: "عدد المشتركين",
-                  border: OutlineInputBorder(),
+                SummaryCard(
+                  monthlyPayment: controller.monthlyPayment,
+
+                  members: controller.members,
+
+                  totalAmount: controller.totalAmount,
+
+                  endDate: controller.endDate,
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "يرجى إدخال عدد المشتركين";
-                  }
 
-                  if (int.tryParse(value) == null) {
-                    return "أدخل عدداً صحيحاً";
-                  }
+                const SizedBox(height: 25),
 
-                  return null;
-                },
-              ),
+                SaveButton(
+                  onPressed: () async {
+                    final result = await controller.save(context);
 
-              const SizedBox(height: 24),
-
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton.icon(
-                  onPressed: _save,
-                  icon: const Icon(Icons.save),
-                  label: const Text("حفظ"),
+                    if (result && context.mounted) {
+                      Navigator.pop(context);
+                    }
+                  },
                 ),
-              ),
-            ],
+
+                const SizedBox(height: 40),
+              ],
+            ),
           ),
         ),
       ),
